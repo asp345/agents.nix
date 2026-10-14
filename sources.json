@@ -1,0 +1,7 @@
+{
+  "version": "1.2.0",
+  "hashes": {
+    "linux-x64": "sha256-APw2z/3rzupaSCMNpizz+0YxePj+GFdmZS+WACokaEc=",
+    "linux-arm64": "sha256-2Fl+46IFBZLTjmf2tgmrVROd7tfoIAINkQ2E8Xu3q9Y="
+  }
+}
