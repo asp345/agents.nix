@@ -47,7 +47,7 @@ stdenv.mkDerivation {
         ]
       } \
       --run 'export CLAUDE_CONFIG_DIR="''${CLAUDE_CONFIG_DIR:-''${XDG_CONFIG_HOME:-$HOME/.config}/claude}"' \
-      --set DISABLE_AUTOUPDATER 1 \
+      --set DISABLE_UPDATES 1 \
       --set DISABLE_INSTALLATION_CHECKS 1
     runHook postInstall
   '';
