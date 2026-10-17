@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch,
   makeWrapper,
   patchelf,
   ripgrep,
@@ -17,6 +18,15 @@ let
       aarch64-linux = "linux-arm64";
     }
     .${stdenv.hostPlatform.system};
+  patchelf' = patchelf.overrideAttrs (old: {
+    patches = (old.patches or [ ]) ++ [
+      (fetchpatch {
+        url = "https://github.com/NixOS/patchelf/commit/52fd21df79d6631799db20b17c2d23121e1eb176.patch";
+        includes = [ "src/patchelf.cc" ];
+        hash = "sha256-4Z7TyktsTkl1eDNS9JUErpBMaVZsJ+kvEDNAa6AVZ5Y=";
+      })
+    ];
+  });
 in
 stdenv.mkDerivation {
   pname = "opencode";
@@ -29,10 +39,7 @@ stdenv.mkDerivation {
 
   sourceRoot = "package";
 
-  nativeBuildInputs = [
-    makeWrapper
-    patchelf
-  ];
+  nativeBuildInputs = [ makeWrapper ];
 
   dontConfigure = true;
   dontBuild = true;
@@ -42,7 +49,7 @@ stdenv.mkDerivation {
   installPhase = ''
     runHook preInstall
     install -Dm755 bin/opencode $out/libexec/opencode
-    patchelf \
+    ${lib.getExe patchelf'} \
       --set-interpreter ${stdenv.cc.bintools.dynamicLinker} \
       --force-rpath --set-rpath ${
         lib.makeLibraryPath [
