@@ -39,6 +39,7 @@ stdenv.mkDerivation {
     runHook preInstall
     install -Dm755 $src $out/libexec/omp
     makeWrapper $out/libexec/omp $out/bin/omp \
+      --set-default GIT_EDITOR true \
       --run 'export PI_CONFIG_DIR="''${PI_CONFIG_DIR:-$(${coreutils}/bin/realpath -m --relative-to="$HOME" "''${XDG_CONFIG_HOME:-$HOME/.config}/omp")}"' \
       --run 'export PI_NATIVES_DIR="''${PI_NATIVES_DIR:-$HOME/$PI_CONFIG_DIR/natives}"'
     runHook postInstall
