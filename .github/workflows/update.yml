@@ -53,7 +53,12 @@ jobs:
         with:
           name: packages
           path: packages
-      - run: nix build -L .#packages.${{ matrix.system }}.{pi,omp,dsh}
+      - run: |
+          attrs=()
+          for dir in packages/*/; do
+            attrs+=(".#packages.${{ matrix.system }}.$(basename "$dir")")
+          done
+          nix build -L "${attrs[@]}"
 
   push:
     needs:

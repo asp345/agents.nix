@@ -4,9 +4,10 @@
   inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
 
   outputs =
-    { self, nixpkgs }:
+    { nixpkgs, ... }:
     let
-      forAllSystems = nixpkgs.lib.genAttrs [
+      inherit (nixpkgs) lib;
+      forAllSystems = lib.genAttrs [
         "x86_64-linux"
         "aarch64-linux"
       ];
@@ -14,10 +15,20 @@
         pi = pkgs.callPackage ./packages/pi/package.nix { };
         omp = pkgs.callPackage ./packages/omp/package.nix { };
         dsh = pkgs.callPackage ./packages/dsh/package.nix { };
+        claude-code = pkgs.callPackage ./packages/claude-code/package.nix { };
+        opencode = pkgs.callPackage ./packages/opencode/package.nix { };
       };
     in
     {
-      packages = forAllSystems (system: callPackages nixpkgs.legacyPackages.${system});
+      packages = forAllSystems (
+        system:
+        callPackages (
+          import nixpkgs {
+            inherit system;
+            config.allowUnfreePredicate = pkg: lib.getName pkg == "claude-code";
+          }
+        )
+      );
 
       overlays.default = final: _prev: callPackages final;
     };
