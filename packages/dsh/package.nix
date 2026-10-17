@@ -5,7 +5,7 @@
   autoPatchelfHook,
   makeWrapper,
   nodejs,
-  pnpm_11,
+  pnpm,
   git,
 }:
 
@@ -45,11 +45,25 @@ buildNpmPackage {
 
     mkdir -p $out/lib/dsh $out/bin
     cp -r node_modules $out/lib/dsh/
+    # node-addon-require-builtin decodes the machine code of node::PrincipalRealm::builtin_module_require,
+    # which fails on nixpkgs Node (zerocallusedregs hardening). Load the internals through --expose-internals.
+    # dsh-hmr only takes internalBinding from internal/bootstrap/realm, which --expose-internals does not expose;
+    # internal/test/binding returns the same internalBinding("modules") object.
+    substituteInPlace \
+      $out/lib/dsh/node_modules/@deepseek-ai/dsh-app-boot/lib/index.js \
+      $out/lib/dsh/node_modules/@deepseek-ai/dsh-app-boot/lib/worker/profile-resolution-bootstrap.js \
+      --replace-fail 'createRequire(import.meta.url)("node-addon-require-builtin")' \
+      '{ requireBuiltin: createRequire(import.meta.url) }'
+    substituteInPlace $out/lib/dsh/node_modules/@deepseek-ai/dsh-hmr/lib/index.js \
+      --replace-fail 'requireInternal("internal/bootstrap/realm")' \
+      'requireInternal("internal/test/binding")'
     makeWrapper ${lib.getExe nodejs} $out/bin/dsh \
+      --add-flags --expose-internals \
+      --add-flags --disable-warning=internal/test/binding \
       --add-flags $out/lib/dsh/node_modules/@deepseek-ai/dsh/lib/bin.js \
       --prefix PATH : ${
         lib.makeBinPath [
-          pnpm_11
+          pnpm
           git
         ]
       } \
