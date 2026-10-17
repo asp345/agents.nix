@@ -1,5 +1,5 @@
 {
-  description = "Pi coding agent binary from upstream releases";
+  description = "Coding agent harnesses packaged from upstream releases";
 
   inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
 
@@ -10,15 +10,15 @@
         "x86_64-linux"
         "aarch64-linux"
       ];
+      callPackages = pkgs: {
+        pi = pkgs.callPackage ./packages/pi/package.nix { };
+        omp = pkgs.callPackage ./packages/omp/package.nix { };
+        dsh = pkgs.callPackage ./packages/dsh/package.nix { };
+      };
     in
     {
-      packages = forAllSystems (system: {
-        pi = nixpkgs.legacyPackages.${system}.callPackage ./package.nix { };
-        default = self.packages.${system}.pi;
-      });
+      packages = forAllSystems (system: callPackages nixpkgs.legacyPackages.${system});
 
-      overlays.default = final: _prev: {
-        pi = final.callPackage ./package.nix { };
-      };
+      overlays.default = final: _prev: callPackages final;
     };
 }

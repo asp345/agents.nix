@@ -15,15 +15,15 @@ jobs:
   update:
     runs-on: ubuntu-latest
     outputs:
-      version: ${{ steps.update.outputs.version }}
       changed: ${{ steps.update.outputs.changed }}
     steps:
       - uses: actions/checkout@v7
       - uses: cachix/install-nix-action@v31
       - id: update
         run: |
-          ./update.sh
-          echo "version=$(jq -r .version sources.json)" >> "$GITHUB_OUTPUT"
+          for script in packages/*/update.sh; do
+            "$script"
+          done
           if git diff --quiet; then
             echo "changed=false" >> "$GITHUB_OUTPUT"
           else
@@ -32,8 +32,8 @@ jobs:
       - if: steps.update.outputs.changed == 'true'
         uses: actions/upload-artifact@v7
         with:
-          name: sources
-          path: sources.json
+          name: packages
+          path: packages
 
   build:
     needs: update
@@ -51,8 +51,9 @@ jobs:
       - uses: cachix/install-nix-action@v31
       - uses: actions/download-artifact@v8
         with:
-          name: sources
-      - run: nix build -L .#packages.${{ matrix.system }}.pi
+          name: packages
+          path: packages
+      - run: nix build -L .#packages.${{ matrix.system }}.{pi,omp,dsh}
 
   push:
     needs:
@@ -63,12 +64,16 @@ jobs:
       - uses: actions/checkout@v7
       - uses: actions/download-artifact@v8
         with:
-          name: sources
-      - env:
-          VERSION: ${{ needs.update.outputs.version }}
-        run: |
+          name: packages
+          path: packages
+      - run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git commit -am "pi: v$VERSION"
-          git tag "v$VERSION"
-          git push origin HEAD "refs/tags/v$VERSION"
+          for dir in packages/*/; do
+            name=$(basename "$dir")
+            if ! git diff --quiet -- "$dir"; then
+              git add "$dir"
+              git commit -m "$name: v$(jq -r .version "$dir/sources.json")"
+            fi
+          done
+          git push origin HEAD
