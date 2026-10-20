@@ -50,7 +50,6 @@ stdenv.mkDerivation {
     runHook preInstall
     install -Dm755 bin/opencode $out/libexec/opencode
     ${lib.getExe patchelf'} \
-      --set-interpreter ${stdenv.cc.bintools.dynamicLinker} \
       --force-rpath --set-rpath ${
         lib.makeLibraryPath [
           stdenv.cc.cc.lib
@@ -58,6 +57,9 @@ stdenv.mkDerivation {
           libxcb
         ]
       } \
+      $out/libexec/opencode
+    ${lib.getExe patchelf'} \
+      --set-interpreter ${stdenv.cc.bintools.dynamicLinker} \
       $out/libexec/opencode
     makeWrapper $out/libexec/opencode $out/bin/opencode \
       --prefix PATH : ${lib.makeBinPath [ ripgrep ]} \
