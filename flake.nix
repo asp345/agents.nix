@@ -33,5 +33,7 @@
       );
 
       overlays.default = final: _prev: callPackages final;
+
+      homeManagerModules.magpie = import ./modules/magpie.nix;
     };
 }
