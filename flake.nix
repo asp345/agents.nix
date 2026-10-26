@@ -17,6 +17,8 @@
         dsh = pkgs.callPackage ./packages/dsh/package.nix { };
         claude-code = pkgs.callPackage ./packages/claude-code/package.nix { };
         opencode = pkgs.callPackage ./packages/opencode/package.nix { };
+        magpie = pkgs.callPackage ./packages/magpie/package.nix { };
+        codex = pkgs.callPackage ./packages/codex/package.nix { };
       };
     in
     {
