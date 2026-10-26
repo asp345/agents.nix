@@ -50,7 +50,6 @@ stdenv.mkDerivation {
           ripgrep
         ]
       } \
-      --run 'export PI_CODING_AGENT_DIR="''${PI_CODING_AGENT_DIR:-''${XDG_CONFIG_HOME:-$HOME/.config}/pi}"' \
       --set-default GIT_EDITOR true \
       --set PI_SKIP_VERSION_CHECK 1 \
       --set PI_TELEMETRY 0

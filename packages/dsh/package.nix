@@ -67,7 +67,6 @@ buildNpmPackage {
           git
         ]
       } \
-      --run 'export DSH_HOME="''${DSH_HOME:-''${XDG_CONFIG_HOME:-$HOME/.config}/dsh}"' \
       --set DSH_TELEMETRY_DISABLED 1
 
     runHook postInstall
