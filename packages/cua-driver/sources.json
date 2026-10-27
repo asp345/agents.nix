@@ -1,0 +1,7 @@
+{
+  "version": "0.38.0",
+  "hashes": {
+    "linux-x86_64": "sha256-MauXCd2RznNnfkm58+dcbw0+TZYlwobJ5YJiv76mmN0=",
+    "linux-arm64": "sha256-gMmuZrxzIgUt1CbGEzyWCGsziUvwbJcryoIVOEQAsz0="
+  }
+}

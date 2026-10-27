@@ -19,6 +19,7 @@
         opencode = pkgs.callPackage ./packages/opencode/package.nix { };
         magpie = pkgs.callPackage ./packages/magpie/package.nix { };
         codex = pkgs.callPackage ./packages/codex/package.nix { };
+        cua-driver = pkgs.callPackage ./packages/cua-driver/package.nix { };
       };
     in
     {
