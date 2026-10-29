@@ -20,6 +20,7 @@
         magpie = pkgs.callPackage ./packages/magpie/package.nix { };
         codex = pkgs.callPackage ./packages/codex/package.nix { };
         cua-driver = pkgs.callPackage ./packages/cua-driver/package.nix { };
+        rtk = pkgs.callPackage ./packages/rtk/package.nix { };
       };
     in
     {
@@ -28,7 +29,12 @@
         callPackages (
           import nixpkgs {
             inherit system;
-            config.allowUnfreePredicate = pkg: lib.getName pkg == "claude-code";
+            config.allowUnfreePredicate =
+              pkg:
+              lib.elem (lib.getName pkg) [
+                "claude-code"
+                "rtk"
+              ];
           }
         )
       );
