@@ -1,7 +1,7 @@
 {
-  "version": "0.1.2902",
+  "version": "0.1.2906",
   "hashes": {
-    "linux-amd64": "sha256-v+12gilX+Saq9Ovo2H6yEFSvAMQ5nhAvkvk2Y0hprSE=",
-    "linux-arm64": "sha256-QsvWaerGLMm3K0TvQnjx569VF56sx8rMnfaQDG+Equs="
+    "linux-amd64": "sha256-xKqf4Dr3KU2mHjkG8AL6nxeI2w0O2giYtPCOjM6caXY=",
+    "linux-arm64": "sha256-kT+oDFbDoLBFaLFFqh7hw1sRLrXnqRoJVHm2+8GReD0="
   }
 }
