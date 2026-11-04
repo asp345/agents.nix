@@ -22,6 +22,7 @@ jobs:
       - id: update
         run: |
           for script in packages/*/update.sh; do
+            echo "$script"
             "$script"
           done
           if git diff --quiet; then
