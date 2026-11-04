@@ -22,7 +22,7 @@ stdenv.mkDerivation {
   inherit (sources) version;
 
   src = fetchurl {
-    url = "https://storage.googleapis.com/claude-code-dist-86c565f3-f756-42ad-8dfa-d59b1c096819/claude-code-releases/${sources.version}/${platform}/claude";
+    url = "https://registry.npmjs.org/@anthropic-ai/claude-code-${platform}/-/claude-code-${platform}-${sources.version}.tgz";
     hash = sources.hashes.${platform};
   };
 
@@ -31,14 +31,13 @@ stdenv.mkDerivation {
     makeWrapper
   ];
 
-  dontUnpack = true;
   dontConfigure = true;
   dontBuild = true;
   dontStrip = true;
 
   installPhase = ''
     runHook preInstall
-    install -Dm755 $src $out/libexec/claude
+    install -Dm755 claude $out/libexec/claude
     makeWrapper $out/libexec/claude $out/bin/claude \
       --prefix PATH : ${
         lib.makeBinPath [

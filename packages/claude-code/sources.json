@@ -1,7 +1,7 @@
 {
   "version": "2.1.317",
   "hashes": {
-    "linux-x64": "sha256-6yJEGeNEV1+qSh85spC2SUJaEM1e4u8dADSAzZrlfrA=",
-    "linux-arm64": "sha256-VjoNYK0MIj2UFXaCEJl6yw9xNOpR3Dwjjoi8Lhjd7vo="
+    "linux-x64": "sha512-u19fYJ4llqi+dAGAj6P1BNu/CRSe0rv4O8Mv/5SQPU5oXCYmUssbJgrBI6rWbIFRAE3YcLCzKlwdHbzlSXBlSA==",
+    "linux-arm64": "sha512-awlwqIvbePCG9zVrlBm5L/3eELJmGJThom+1QgHeBK5N9F1dFpyBQP9M5A8s0PAaWBbLwDIm9SHVmZ6j/TftbA=="
   }
 }
