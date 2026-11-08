@@ -14,6 +14,7 @@
       callPackages = pkgs: {
         pi = pkgs.callPackage ./packages/pi/package.nix { };
         pig = pkgs.callPackage ./packages/pig/package.nix { };
+        octet = pkgs.callPackage ./packages/octet/package.nix { };
         omp = pkgs.callPackage ./packages/omp/package.nix { };
         dsh = pkgs.callPackage ./packages/dsh/package.nix { };
         claude-code = pkgs.callPackage ./packages/claude-code/package.nix { };
@@ -27,16 +28,18 @@
     {
       packages = forAllSystems (
         system:
-        callPackages (
-          import nixpkgs {
-            inherit system;
-            config.allowUnfreePredicate =
-              pkg:
-              lib.elem (lib.getName pkg) [
-                "claude-code"
-                "rtk"
-              ];
-          }
+        lib.filterAttrs (_: lib.meta.availableOn { inherit system; }) (
+          callPackages (
+            import nixpkgs {
+              inherit system;
+              config.allowUnfreePredicate =
+                pkg:
+                lib.elem (lib.getName pkg) [
+                  "claude-code"
+                  "rtk"
+                ];
+            }
+          )
         )
       );
 

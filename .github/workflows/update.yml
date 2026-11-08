@@ -55,11 +55,8 @@ jobs:
           name: packages
           path: packages
       - run: |
-          attrs=()
-          for dir in packages/*/; do
-            attrs+=(".#packages.${{ matrix.system }}.$(basename "$dir")")
-          done
-          nix build -L "${attrs[@]}"
+          mapfile -t names < <(nix eval --json .#packages.${{ matrix.system }} --apply builtins.attrNames | jq -r '.[]')
+          nix build -L "${names[@]/#/.#packages.${{ matrix.system }}.}"
 
   push:
     needs:
