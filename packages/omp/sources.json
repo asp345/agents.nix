@@ -1,7 +1,7 @@
 {
-  "version": "18.18.1",
+  "version": "18.18.2",
   "hashes": {
-    "linux-x64": "sha256-KnXhZVBnZ4OzvIvg4GUTR43ViB78ZHlUZCqzDbj5vgY=",
-    "linux-arm64": "sha256-O9dpn+fqY6jrFPJykNnTxqVuVTiL72xWDLE52AkzBSg="
+    "linux-x64": "sha256-llz2A41gYDKW5B4M+HTKkRZWFTH34pbpfuCp+ExAXlM=",
+    "linux-arm64": "sha256-Eo4XcrLgG/fug8xoEOfvweCl7ahyILrYcDIvdiqUWKs="
   }
 }
