@@ -1,0 +1,7 @@
+{
+  "version": "0.7.0",
+  "hashes": {
+    "linux-amd64": "sha256-C1q3y19oDn0zU72qOhAYhjw8NVL4i+xzA3BmjlgZmVo=",
+    "linux-arm64": "sha256-iNLctKSFKpgNwcqSAu7ZRV/4+wEVU8jbYsG4XGdqNms="
+  }
+}

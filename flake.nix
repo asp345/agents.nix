@@ -13,6 +13,7 @@
       ];
       callPackages = pkgs: {
         pi = pkgs.callPackage ./packages/pi/package.nix { };
+        pig = pkgs.callPackage ./packages/pig/package.nix { };
         omp = pkgs.callPackage ./packages/omp/package.nix { };
         dsh = pkgs.callPackage ./packages/dsh/package.nix { };
         claude-code = pkgs.callPackage ./packages/claude-code/package.nix { };
