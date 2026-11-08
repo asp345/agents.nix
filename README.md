@@ -1,33 +1,24 @@
 # agents.nix
 
-Nix packages for coding agent harnesses, from upstream binaries. Targets `x86_64-linux` and `aarch64-linux`.
-
-## Usage
+Nix packages for coding agent harnesses, built from upstream releases for Linux.
 
 ```sh
 nix run github:asp345/agents.nix#pi
 ```
 
-In a flake, add the overlay:
+Overlay:
 
 ```nix
-{
-  inputs.agents.url = "github:asp345/agents.nix";
-
-  outputs = { nixpkgs, agents, ... }: {
-    nixpkgs.overlays = [ agents.overlays.default ];
-  };
-}
+nixpkgs.overlays = [ inputs.agents.overlays.default ];
 ```
 
-Some packages are unfree; add them to `allowUnfreePredicate` when using the overlay.
+`claude-code` and `rtk` are unfree.
 
-## Home Manager
+Home Manager:
 
 ```nix
 {
   imports = [ inputs.agents.homeManagerModules.magpie ];
-
   services.magpie = {
     enable = true;
     webKey = "…";
@@ -35,6 +26,4 @@ Some packages are unfree; add them to `allowUnfreePredicate` when using the over
 }
 ```
 
-## Updates
-
-Every package ships `update.sh`, which reads the upstream version and prefetches new hashes into `sources.json`. GitHub Actions runs them on a schedule, builds what changed on both systems, and commits. `flake.lock` is updated daily.
+`packages/*/update.sh` updates `packages/*/sources.json`. GitHub Actions runs them on a schedule, builds the packages, and commits.
