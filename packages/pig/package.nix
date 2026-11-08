@@ -5,6 +5,7 @@
   makeWrapper,
   fd,
   ripgrep,
+  go,
 }:
 
 let
@@ -44,6 +45,7 @@ stdenv.mkDerivation {
           ripgrep
         ]
       } \
+      --suffix PATH : ${lib.makeBinPath [ go ]} \
       --set-default GIT_EDITOR true \
       --set PI_SKIP_VERSION_CHECK 1 \
       --set PI_TELEMETRY 0
