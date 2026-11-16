@@ -2,7 +2,10 @@
 set -euo pipefail
 cd "$(dirname "$0")"
 
-version=$(curl -fsSL https://api.github.com/repos/yetone/magpie/releases/latest | jq -r .tag_name | sed 's/^v//')
+auth=()
+[[ -n "${GH_TOKEN:-}" ]] && auth=(--oauth2-bearer "$GH_TOKEN")
+
+version=$(curl -fsSL "${auth[@]}" https://api.github.com/repos/yetone/magpie/releases/latest | jq -r .tag_name | sed 's/^v//')
 
 if [[ "$version" == "$(jq -r .version sources.json)" ]]; then
   exit 0

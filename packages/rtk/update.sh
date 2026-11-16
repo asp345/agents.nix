@@ -2,7 +2,10 @@
 set -euo pipefail
 cd "$(dirname "$0")"
 
-release=$(curl -fsSL https://api.github.com/repos/rtk-ai/rtk/releases/latest)
+auth=()
+[[ -n "${GH_TOKEN:-}" ]] && auth=(--oauth2-bearer "$GH_TOKEN")
+
+release=$(curl -fsSL "${auth[@]}" https://api.github.com/repos/rtk-ai/rtk/releases/latest)
 version=$(jq -r .tag_name <<<"$release" | sed 's/^v//')
 
 if [[ "$version" == "$(jq -r .version sources.json)" ]]; then
