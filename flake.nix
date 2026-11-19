@@ -22,6 +22,7 @@
         codex = pkgs.callPackage ./packages/codex/package.nix { };
         cua-driver = pkgs.callPackage ./packages/cua-driver/package.nix { };
         rtk = pkgs.callPackage ./packages/rtk/package.nix { };
+        antigravity-cli = pkgs.callPackage ./packages/antigravity-cli/package.nix { };
       };
     in
     {
@@ -35,6 +36,7 @@
               lib.elem (lib.getName pkg) [
                 "claude-code"
                 "rtk"
+                "antigravity-cli"
               ];
           }
         )

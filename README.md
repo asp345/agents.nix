@@ -12,7 +12,7 @@ Overlay:
 nixpkgs.overlays = [ inputs.agents.overlays.default ];
 ```
 
-`claude-code` and `rtk` are unfree.
+`claude-code`, `rtk`, and `antigravity-cli` are unfree.
 
 Home Manager:
 
