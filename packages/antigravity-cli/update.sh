@@ -25,7 +25,7 @@ for platform in linux-x64 linux-arm64; do
     linux-arm64) manifest=$arm64 ;;
   esac
   urls=$(jq --arg platform "$platform" --arg url "$(jq -r .url <<<"$manifest")" '.[$platform] = $url' <<<"$urls")
-  sri=$(jq -r .sha512 <<<"$manifest" | nix hash convert --hash-algo sha512 --to sri)
+  sri=$(nix hash convert --hash-algo sha512 --to sri "$(jq -r .sha512 <<<"$manifest")")
   hashes=$(jq --arg platform "$platform" --arg hash "$sri" '.[$platform] = $hash' <<<"$hashes")
 done
 
