@@ -1,9 +1,9 @@
 {
   lib,
-  stdenv,
-  fetchurl,
+  buildNpmPackage,
   autoPatchelfHook,
   makeWrapper,
+  nodejs,
   libxcb,
   fd,
   ripgrep,
@@ -11,21 +11,20 @@
 
 let
   sources = lib.importJSON ./sources.json;
-  platform =
-    {
-      x86_64-linux = "linux-x64";
-      aarch64-linux = "linux-arm64";
-    }
-    .${stdenv.hostPlatform.system};
 in
-stdenv.mkDerivation {
+buildNpmPackage {
   pname = "pi";
-  inherit (sources) version;
+  inherit (sources) version npmDepsHash;
 
-  src = fetchurl {
-    url = "https://github.com/earendil-works/pi/releases/download/v${sources.version}/pi-${platform}.tar.gz";
-    hash = sources.hashes.${platform};
+  src = lib.fileset.toSource {
+    root = ./.;
+    fileset = lib.fileset.unions [
+      ./package.json
+      ./package-lock.json
+    ];
   };
+
+  inherit nodejs;
 
   nativeBuildInputs = [
     autoPatchelfHook
@@ -34,16 +33,15 @@ stdenv.mkDerivation {
 
   buildInputs = [ libxcb ];
 
-  dontConfigure = true;
-  dontBuild = true;
-  dontStrip = true;
+  dontNpmBuild = true;
 
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/libexec $out/bin
-    cp -r . $out/libexec/pi
-    makeWrapper $out/libexec/pi/pi $out/bin/pi \
+    mkdir -p $out/lib/pi $out/bin
+    cp -r node_modules $out/lib/pi/
+    makeWrapper ${lib.getExe nodejs} $out/bin/pi \
+      --add-flags $out/lib/pi/node_modules/@earendil-works/pi-coding-agent/dist/bundle/cli.js \
       --prefix PATH : ${
         lib.makeBinPath [
           fd
@@ -73,6 +71,5 @@ stdenv.mkDerivation {
       "x86_64-linux"
       "aarch64-linux"
     ];
-    sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
   };
 }

@@ -8,10 +8,9 @@ if [[ "$version" == "$(jq -r .version sources.json)" ]]; then
   exit 0
 fi
 
-hashes='{}'
-for platform in linux-x64 linux-arm64; do
-  hash=$(nix store prefetch-file --json "https://github.com/earendil-works/pi/releases/download/v$version/pi-$platform.tar.gz" | jq -r .hash)
-  hashes=$(jq --arg platform "$platform" --arg hash "$hash" '.[$platform] = $hash' <<<"$hashes")
-done
+jq -n --arg version "$version" '{name: "pi", private: true, dependencies: {"@earendil-works/pi-coding-agent": $version}}' >package.json
+rm -f package-lock.json
+nix shell --inputs-from ../.. nixpkgs#nodejs --command npm install --package-lock-only --ignore-scripts --no-audit --no-fund
+npmDepsHash=$(nix run --inputs-from ../.. nixpkgs#prefetch-npm-deps -- package-lock.json)
 
-jq -n --arg version "$version" --argjson hashes "$hashes" '{version: $version, hashes: $hashes}' >sources.json
+jq -n --arg version "$version" --arg npmDepsHash "$npmDepsHash" '{version: $version, npmDepsHash: $npmDepsHash}' >sources.json

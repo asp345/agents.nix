@@ -1,7 +1,4 @@
 {
   "version": "1.6.0",
-  "hashes": {
-    "linux-x64": "sha256-73fb5DebO960JaHhuGL6PJFcJVAA3+SWXJju6WpXZdE=",
-    "linux-arm64": "sha256-VARUe5c5vlltUK5xQsUlNYmejn3Tenus6b5ZPgNVtGg="
-  }
+  "npmDepsHash": "sha256-idRFxUPjoF7PZsF/BU0uSmADiCRLPo6j17+xQ27EmLU="
 }
