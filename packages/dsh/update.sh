@@ -2,7 +2,7 @@
 set -euo pipefail
 cd "$(dirname "$0")"
 
-version=$(curl -fsSL https://registry.npmjs.org/@deepseek-ai/dsh | jq -r '."dist-tags".next')
+version=$(curl --retry 5 --retry-all-errors --retry-delay 10 -fsSL https://registry.npmjs.org/@deepseek-ai/dsh | jq -r '."dist-tags".next')
 
 if [[ "$version" == "$(jq -r .version sources.json)" ]]; then
   exit 0

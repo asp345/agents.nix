@@ -4,8 +4,8 @@ cd "$(dirname "$0")"
 
 manifests=https://antigravity-cli-auto-updater-974169037036.us-central1.run.app/manifests
 
-x64=$(curl -fsSL "$manifests/linux_amd64.json")
-arm64=$(curl -fsSL "$manifests/linux_arm64.json")
+x64=$(curl --retry 5 --retry-all-errors --retry-delay 10 -fsSL "$manifests/linux_amd64.json")
+arm64=$(curl --retry 5 --retry-all-errors --retry-delay 10 -fsSL "$manifests/linux_arm64.json")
 version=$(jq -r .version <<<"$x64")
 
 if [[ "$version" != "$(jq -r .version <<<"$arm64")" ]]; then

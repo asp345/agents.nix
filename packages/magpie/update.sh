@@ -5,13 +5,13 @@ cd "$(dirname "$0")"
 auth=()
 [[ -n "${GH_TOKEN:-}" ]] && auth=(--oauth2-bearer "$GH_TOKEN")
 
-version=$(curl -fsSL "${auth[@]}" https://api.github.com/repos/yetone/magpie/releases/latest | jq -r .tag_name | sed 's/^v//')
+version=$(curl --retry 5 --retry-all-errors --retry-delay 10 -fsSL "${auth[@]}" https://api.github.com/repos/yetone/magpie/releases/latest | jq -r .tag_name | sed 's/^v//')
 
 if [[ "$version" == "$(jq -r .version sources.json)" ]]; then
   exit 0
 fi
 
-sums=$(curl -fsSL "https://github.com/yetone/magpie/releases/download/v$version/SHA256SUMS")
+sums=$(curl --retry 5 --retry-all-errors --retry-delay 10 -fsSL "https://github.com/yetone/magpie/releases/download/v$version/SHA256SUMS")
 
 hashes='{}'
 for asset in linux-amd64 linux-arm64; do

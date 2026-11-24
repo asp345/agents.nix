@@ -5,7 +5,7 @@ cd "$(dirname "$0")"
 auth=()
 [[ -n "${GH_TOKEN:-}" ]] && auth=(--oauth2-bearer "$GH_TOKEN")
 
-release=$(curl -fsSL "${auth[@]}" https://api.github.com/repos/MichaelKinsy/PiG/releases/latest)
+release=$(curl --retry 5 --retry-all-errors --retry-delay 10 -fsSL "${auth[@]}" https://api.github.com/repos/MichaelKinsy/PiG/releases/latest)
 version=$(jq -r .tag_name <<<"$release" | sed 's/^v//')
 
 if [[ "$version" == "$(jq -r .version sources.json)" ]]; then

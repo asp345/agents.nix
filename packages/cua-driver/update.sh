@@ -9,7 +9,7 @@ platforms=(linux-x86_64 linux-arm64)
 
 release=null
 for page in {1..10}; do
-  releases=$(curl -fsSL "${auth[@]}" "https://api.github.com/repos/trycua/cua/releases?per_page=100&page=$page")
+  releases=$(curl --retry 5 --retry-all-errors --retry-delay 10 -fsSL "${auth[@]}" "https://api.github.com/repos/trycua/cua/releases?per_page=100&page=$page")
   release=$(jq --args '
     [.[] | select(.draft == false and (.tag_name | test("^cua-driver-rs-v[0-9]+\\.[0-9]+\\.[0-9]+$")))
       | (.tag_name | ltrimstr("cua-driver-rs-v")) as $version
