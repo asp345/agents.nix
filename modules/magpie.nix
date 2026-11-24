@@ -22,7 +22,10 @@ in
       Unit.Description = "magpie gateway";
       Service = {
         ExecStart = "${lib.getExe magpie} serve --web";
-        Environment = [ "MAGPIE_WEB_KEY=${cfg.webKey}" ];
+        Environment = [
+          "MAGPIE_WEB_KEY=${cfg.webKey}"
+          "MAGPIE_BUN=${lib.getExe pkgs.bun}"
+        ];
         Restart = "on-failure";
       };
       Install.WantedBy = [ "default.target" ];
