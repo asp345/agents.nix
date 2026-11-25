@@ -57,7 +57,7 @@ stdenv.mkDerivation {
   installCheckPhase = ''
     runHook preInstallCheck
     export HOME=$TMPDIR
-    [[ "$($out/bin/pig --version)" == "${sources.version}+"* ]]
+    [[ "$($out/bin/pig version | head -n 1)" == "pig: ${sources.version}" ]]
     runHook postInstallCheck
   '';
 
